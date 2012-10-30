@@ -246,6 +246,9 @@ fim.namespace('fim.klausumatic.editor');
             $(degreeSel)[0].value = parsed["degree"];
             $(yearSel)[0].value = parsed["year"];
             $(subjectSel)[0].value = parsed["subject"];
+            if (typeof(parsed["note"]) !== "undefined") {
+                $(noteSel)[0].value = parsed["note"];
+            }
             if (parsed["hws"] === true) {
                 $(hwsSel)[0].checked = true;
             }
@@ -367,7 +370,6 @@ fim.namespace('fim.klausumatic.upload');
                     "Uploading "+len+" file(s).")();
             },
             uploadFinished: function(i, file, response, time) {
-                console.log(response);
                 if (response == "DUPLICATE") {
                     currentUploadDuplicate++;
                 } else {
@@ -385,7 +387,7 @@ fim.namespace('fim.klausumatic.upload');
             },
             speedUpdated: function(i, file, speed) {
                 var s = Math.round(speed);
-               $(speedSel).html(file.name + ", " + s + " kB/s");
+               $(speedSel).html(s + " kB/s<br>" + file.name);
             },
             afterAll: function() {
                 fim.klausumatic.untagged.successMessageClosure(
@@ -513,11 +515,14 @@ fim.namespace('fim.klausumatic.fn');
             'mcb'           :  'Majster-Cederbaum',
             'prof'          :  'Unbekannt',
             'nuernberger': 'Nürnberger',
-            'maenner': 'Männer'
+            'maenner': 'Männer',
+            'boecherer': 'Böcherer',
+            'goettlich': 'Göttlich',
+            'maedche': 'Mädche'
         };
 
     function parse(filename) {
-        var re = /([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_?([a-zA-Z0-9]*_?[a-zA-Z0-9]*)\.[a-zA-Z]+/,
+        var re = /([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_?([a-zA-Z0-9]*)_?([a-zA-Z0-9]*)\.[a-zA-Z]+/,
             arr, prof, subj, type, sem, note, sol, tmp, year, hws;
 
         arr = re.exec(filename);
@@ -537,14 +542,19 @@ fim.namespace('fim.klausumatic.fn');
             year = tmp[0];
             hws = tmp[1];
             if (arr.length > 5) {
+                console.log(arr);
                 sol = arr[5];
                 if (sol == "ml") {
                     sol = true;
+                } else {
+                    if (arr.length == 6) {
+                        note = arr[5];
+                    }
                 }
             }
             if (arr.length > 6) {
                 note = arr[6];
-            }
+            } 
             return {
                 "professor": prof,
                 "subject": subj,
@@ -583,7 +593,7 @@ fim.namespace('fim.klausumatic.fn');
             year = arr[1];
         } else {
             arr = re2.exec(str);
-            if (typeof(arr) === "undefined" && arr != null) {
+            if (typeof(arr) === "undefined" || arr === null) {
                 return;
             }
             sem = arr[1];

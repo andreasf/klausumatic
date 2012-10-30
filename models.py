@@ -55,9 +55,6 @@ class Exam(models.Model):
     note = models.CharField(max_length=63, null=True, blank=True)
     solution = models.BooleanField()
 
-    class Meta:
-        unique_together = ("subject", "degree", "professor", "year", "hws", 
-            "note", "solution")
 
     def replace_umlauts(self, str):
         str = str.replace(u"ö", "oe")
