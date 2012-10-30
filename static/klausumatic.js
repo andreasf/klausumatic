@@ -217,7 +217,7 @@ fim.namespace('fim.klausumatic.editor');
         hws = $(hwsSel)[0].checked;
         solution = $(solutionSel)[0].checked;
 
-        fim.klausumatic.untagged.tagCurrent(professor, subject, year,
+        fim.klausumatic.untagged.tagCurrent(subject, professor, year,
             hws, degree, note, solution);
     }
     
