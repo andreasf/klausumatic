@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Klausumatic 3000</title>
+    <link rel="stylesheet" href="{{STATIC_URL}}klausumatic.css">
+    <script src="{{STATIC_URL}}jquery-1.8.2.min.js"></script>
+    <script src="{{STATIC_URL}}jquery.autocomplete.js"></script>
+    <script src="{{STATIC_URL}}jquery.filedrop.js"></script>
+    <script src="{{STATIC_URL}}klausumatic.js"></script>
+    <script>
+        $(document).ready(function(){
+            fim.klausumatic.untagged.refresh();
+            fim.klausumatic.editor.init();
+            fim.klausumatic.upload.init();
+        });
+    </script>
+</head>
+<body>
+<div id="header">
+    <h1>KLAUSUMATIC 3000</h1>
+    <div id="links">
+        <a onclick="fim.klausumatic.upload.show()" id="link_upload">UPLOAD</a>
+        <a onclick="fim.klausumatic.editor.show()" id="link_tag">TAG</a>
+        <a href="{% url admin:index %}">ADMIN</a>
+        <a href="{% url admin:logout %}">LOGOUT</a>
+    </div>
+</div>
+<div id="untagged">
+    <h2>UNTAGGED FILES</h2>
+    <ul>
+    </ul>
+</div>
+<div id="upload">
+    <div id="text">
+        <h2>UPLOAD</h2>
+        <p>drag and drop over or</p>
+        <div id="uploadbox">
+            <form action="{% url exams.views.post_file %}" method="POST"><input type="file" name="file" id="file"></form>
+            <div class="button">Choose File</div>
+        </div>
+    </div>
+</div>
+<div id="editor">
+    <h2>EDITOR<span id="filename"></span></h2>
+    <form>
+        <ul>
+            <li><label for="subject">SUBJECT</label><input type="text" id="subject" name="subject"></li>
+            <li><label for="professor">PROFESSOR</label><input type="text" id="professor" name="professor"></li>
+            <li><label for="year">YEAR</label><input type="text" id="year" name="year"></li>
+            <li><label class="check" for="hws">HWS</label><input type="checkbox" name="hws" id="hws" value="hws"></li>
+            <li><label for="degree">DEGREE</label><input type="text" id="degree" name="degree"></li>
+            <li><label for="note">NOTE</label><input type="text" id="note" name="note"></li>
+            <li><label class="check" for="solution">INCLUDES SOLUTION</label><input type="checkbox" name="solution" id="solution" value="solution"></li>
+            <li><hr class="endform"></li>
+            <li><a class="button" onclick="fim.klausumatic.untagged.skip()">SKIP FILE</a></li>
+            <li><a id="download" class="button" target="_new">DOWNLOAD</a></li>
+            <li><a class="button" onclick="fim.klausumatic.editor.save()">SAVE CHANGES</a></li>
+        </ul>
+    </form>
+    <div id="image">
+    </div>
+</div>
+</body>
+</html>
+
