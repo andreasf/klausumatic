@@ -308,7 +308,7 @@ fim.namespace('fim.klausumatic.upload');
         progressSel = "#upload_in_progress",
         speedSel = "#speed",
         uploadUrl = "/klausurdb/file/new",
-        maxFiles = 20,
+        maxFiles = 32,
         maxFileSize = 10,
         currentUploadOK = 0,
         currentUploadDuplicate = 0;
@@ -542,17 +542,16 @@ fim.namespace('fim.klausumatic.fn');
             year = tmp[0];
             hws = tmp[1];
             if (arr.length > 5) {
-                console.log(arr);
                 sol = arr[5];
                 if (sol == "ml") {
                     sol = true;
                 } else {
-                    if (arr.length == 6) {
+                    if (arr.length == 6 || arr[6] === "") {
                         note = arr[5];
                     }
                 }
             }
-            if (arr.length > 6) {
+            if (arr.length > 6 && arr[6] != "") {
                 note = arr[6];
             } 
             return {
@@ -587,6 +586,9 @@ fim.namespace('fim.klausumatic.fn');
             re2 = /([a-zA-Z]+)([0-9]+)/,
             arr, sem, year, hws;
         
+        if (str == "unbekannt")
+            return [0, false];
+
         if (str.match(re1)) {
             arr = re1.exec(str);
             sem = arr[2];
