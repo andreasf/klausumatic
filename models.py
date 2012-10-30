@@ -35,7 +35,7 @@ class Subject(models.Model):
     def save(self, *args, **kwargs):
         """remove spaces from abbreviation before saving."""
         if self.abbreviation == "":
-            self.abbreviation = self.name
+            self.abbreviation = self.name[0:16]
         self.abbreviation = self.abbreviation.replace(" ", "")
         super(Subject, self).save(*args, **kwargs)
 
