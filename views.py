@@ -13,6 +13,7 @@ import hashlib
 import logging
 from django.db import IntegrityError
 import os
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,8 @@ def get_thumbnail_path(examfile):
     if os.path.exists(thumb):
         return thumb
     path = os.path.join(settings.MEDIA_ROOT, examfile.path.path)
-    cmd = "mudraw -o %s -h 800 -w 600 '%s' 1" % (thumb, path)
-    args = shlex.split(cmd)
+    cmd = "/usr/local/bin/mudraw -o %s -h 800 -w 600 '%s' 1" % (thumb, path)
+    args = shlex.split(cmd.encode("utf8"))
     mudraw = subprocess.Popen(args)
     mudraw.wait()
     return thumb
@@ -126,7 +127,7 @@ class UploadForm(forms.Form):
     file = forms.FileField()
 
 def store_exam_file(uploaded_file):
-    fn = uploaded_file.name
+    fn = secure_filename(uploaded_file.name)
     full_path = os.path.join(settings.MEDIA_ROOT, "exams", fn)
     count = 2
     while os.path.exists(full_path):
@@ -136,6 +137,12 @@ def store_exam_file(uploaded_file):
     f.write(uploaded_file.read())
     f.close()
     return full_path
+
+    def secure_filename(path):
+        _split = re.compile(r'[\0%s]' % re.escape(''.join(
+            [os.path.sep, os.path.altsep or ''])))
+        return _split.sub('', path)
+
 
 @csrf_exempt
 def post_file(request):
