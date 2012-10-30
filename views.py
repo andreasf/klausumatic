@@ -126,6 +126,11 @@ def get_degrees(request):
 class UploadForm(forms.Form):
     file = forms.FileField()
 
+def secure_filename(path):
+    _split = re.compile(r'[\0%s]' % re.escape(''.join(
+        [os.path.sep, os.path.altsep or ''])))
+    return _split.sub('', path)
+
 def store_exam_file(uploaded_file):
     fn = secure_filename(uploaded_file.name)
     full_path = os.path.join(settings.MEDIA_ROOT, "exams", fn)
@@ -138,10 +143,6 @@ def store_exam_file(uploaded_file):
     f.close()
     return full_path
 
-    def secure_filename(path):
-        _split = re.compile(r'[\0%s]' % re.escape(''.join(
-            [os.path.sep, os.path.altsep or ''])))
-        return _split.sub('', path)
 
 
 @csrf_exempt
