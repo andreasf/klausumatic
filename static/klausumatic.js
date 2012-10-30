@@ -292,6 +292,7 @@ fim.namespace('fim.klausumatic.editor');
     }
 }());
 
+
 fim.namespace('fim.klausumatic.upload');
 (function(){
     "use strict";
@@ -301,6 +302,8 @@ fim.namespace('fim.klausumatic.upload');
     
     var uploadSel = "#upload",
         editorSel = "#editor",
+        progressSel = "#upload_in_progress",
+        speedSel = "#speed",
         uploadUrl = "/klausurdb/file/new",
         maxFiles = 20,
         maxFileSize = 10,
@@ -358,6 +361,8 @@ fim.namespace('fim.klausumatic.upload');
                 $(uploadSel).removeClass("drop"); 
             },
             uploadStarted: function(i, file, len) {
+                $(uploadSel).hide();
+                $(progressSel).fadeIn();
                 fim.klausumatic.untagged.successMessageClosure(
                     "Uploading "+len+" file(s).")();
             },
@@ -378,6 +383,10 @@ fim.namespace('fim.klausumatic.upload');
                     setStatus(progress);
                 }
             },
+            speedUpdated: function(i, file, speed) {
+                var s = Math.round(speed);
+               $(speedSel).html(file.name + ", " + s + " kB/s");
+            },
             afterAll: function() {
                 fim.klausumatic.untagged.successMessageClosure(
                     "Upload finished:<br>" + 
@@ -387,6 +396,9 @@ fim.namespace('fim.klausumatic.upload');
                 fim.klausumatic.untagged.refresh();
                 currentUploadOK = 0;
                 currentUploadDuplicate = 0;
+                $(speedSel).html("");
+                $(progressSel).hide();
+                $(uploadSel).fadeIn();
             }
         });
     }

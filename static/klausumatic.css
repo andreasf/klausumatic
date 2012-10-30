@@ -83,7 +83,7 @@ a:link {
     background-color: #5EA0C0;
     cursor: pointer;
 }
-#upload {
+#upload, #upload_in_progress {
     position: absolute;
     left: 136px;
     top: 42px;
@@ -92,6 +92,9 @@ a:link {
     margin: 24px;
     border: 2px dashed #cccccc;
     border-radius: 8px;
+}
+#upload_in_progress {
+    display: none;
 }
 #editor {
     position: absolute;
@@ -147,7 +150,7 @@ a:link {
     padding-left: 1px;
     padding-right: 1px;
 }
-#upload #text {
+#text {
     position: absolute;
     left: 0px;
     right: 0px;
