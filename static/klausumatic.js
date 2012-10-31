@@ -366,8 +366,6 @@ fim.namespace('fim.klausumatic.upload');
             uploadStarted: function(i, file, len) {
                 $(uploadSel).hide();
                 $(progressSel).fadeIn();
-                fim.klausumatic.untagged.successMessageClosure(
-                    "Uploading "+len+" file(s).")();
             },
             uploadFinished: function(i, file, response, time) {
                 if (response == "DUPLICATE") {
@@ -390,10 +388,15 @@ fim.namespace('fim.klausumatic.upload');
                $(speedSel).html(s + " kB/s<br>" + file.name);
             },
             afterAll: function() {
-                fim.klausumatic.untagged.successMessageClosure(
-                    "Upload finished:<br>" + 
-                    currentUploadOK + " new files,<br>" +
-                    currentUploadDuplicate + " duplicates ignored.")();
+                var msg;
+                
+                msg = "Upload finished:<br>" + 
+                    currentUploadOK + " new files";
+                if (currentUploadDuplicate > 0) {
+                    msg = msg + ",<br>currentUploadDuplicate + 
+                    " duplicates ignored.";
+                }
+                fim.klausumatic.untagged.successMessageClosure(msg)();
                 resetStatus();
                 fim.klausumatic.untagged.refresh();
                 currentUploadOK = 0;

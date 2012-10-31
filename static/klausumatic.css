@@ -211,6 +211,7 @@ input[type="file"] {
     border: 1px solid #cccccc;
     border-radius: 6px;
     color: #000000;
+    background-color: #ffffff;
 }
 a.button:hover {
     background-color: #dd3300; 
