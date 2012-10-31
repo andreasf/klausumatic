@@ -14,9 +14,11 @@ import logging
 from django.db import IntegrityError
 import os
 import re
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
 
+@login_required
 def list_untagged(request):
     """returns a list of all untagged files."""
     unt_obj = ExamFile.objects.filter(exam__isnull=True)
@@ -31,6 +33,7 @@ def list_untagged(request):
     return HttpResponse(content=json, mimetype='application/json')
 
 
+@login_required
 def image(request, ef_id):
     """returns a png rendering of the first pdf page."""
     ef = get_object_or_404(ExamFile, id=ef_id)
@@ -53,6 +56,7 @@ def get_thumbnail_path(examfile):
     mudraw.wait()
     return thumb
 
+@login_required
 def download(request, ef_id):
     """sends an exam to the browser."""
     ef = get_object_or_404(ExamFile, id=ef_id)
@@ -63,10 +67,12 @@ def download(request, ef_id):
     # response['Content-Disposition'] = "attachment; filename=%s" % (fn)
     return response
 
+@login_required
 def file_switch(request, ef_id):
     if request.method == "GET":
         return download(request, ef_id)
 
+@login_required
 def get_metadata(request, ef_id):
     """returns the metadata for a file"""
     ef = get_object_or_404(ExamFile, id=ef_id)
@@ -78,6 +84,7 @@ def get_metadata(request, ef_id):
         mimetype="application/json")
 
 @csrf_exempt
+@login_required
 def metadata_switch(request, ef_id):
     if request.method == "GET":
         return get_metadata(request, ef_id)
@@ -85,6 +92,7 @@ def metadata_switch(request, ef_id):
         return post_metadata(request, ef_id)
     
 @csrf_exempt
+@login_required
 def post_metadata(request, ef_id):
     ef = get_object_or_404(ExamFile, id=ef_id)
     try:
@@ -95,13 +103,19 @@ def post_metadata(request, ef_id):
     e.professor, c = Professor.objects.get_or_create(name=request.POST['professor'])
     e.subject, c = Subject.objects.get_or_create(name=request.POST['subject'])
     e.degree, c = Degree.objects.get_or_create(name=request.POST['degree'])
-    e.year = int(request.POST['year'])
+    try:
+        e.year = int(request.POST['year'])
+    except ValueError:
+        r = HttpResponse("invalid year")
+        r.status_code = 405
+        return r
     e.hws = True if request.POST['hws'] == "true" else False 
     e.solution = True if request.POST['solution'] == "true" else False 
     e.note = request.POST['note'] 
     e.save()
     return HttpResponse("OK")
 
+@login_required
 def get_professors(request):
     profs = Professor.objects.all()
     p = list()
@@ -109,6 +123,7 @@ def get_professors(request):
         p.append(prof.name)
     return HttpResponse(content=cjson.encode(p), mimetype="application/json")
 
+@login_required
 def get_subjects(request):
     subs = Subject.objects.all()
     s = list()
@@ -116,6 +131,7 @@ def get_subjects(request):
         s.append(sub.name)
     return HttpResponse(content=cjson.encode(s), mimetype="application/json")
 
+@login_required
 def get_degrees(request):
     degs = Degree.objects.all()
     d = list()
@@ -146,6 +162,7 @@ def store_exam_file(uploaded_file):
 
 
 @csrf_exempt
+@login_required
 def post_file(request):
     if request.method == "POST":
         form = UploadForm(request.POST, request.FILES)
@@ -179,6 +196,7 @@ def delete_files_without_hash():
     except ExamFile.DoesNotExist:
         pass
 
+@login_required
 def klausumatic(request):
     context = {
         'STATIC_URL': settings.STATIC_URL,

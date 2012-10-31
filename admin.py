@@ -26,7 +26,7 @@ class ExamFileAdmin(admin.ModelAdmin):
     readonly_fields = ('hash', 'upload_user')
     list_display = ['path', 'hash', 'exam']
     ordering = ['path']
-    list_filter = ['exam']
+    search_fields = ['path', 'hash']
 
     def save_model(self, request, obj, form, change):
         obj.upload_user = request.user.username

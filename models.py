@@ -36,7 +36,10 @@ class Subject(models.Model):
         """remove spaces from abbreviation before saving."""
         if self.abbreviation == "":
             self.abbreviation = self.name[0:16]
-        self.abbreviation = self.abbreviation.replace(" ", "")
+            self.abbreviation = self.abbreviation.replace(" ", "")
+            i=0
+            while Subject.objects.filter(abbreviation=self.abbreviation).count() > 0 and i < 100:
+                self.abbreviation = self.abbreviation[0:14] + str(i)
         super(Subject, self).save(*args, **kwargs)
 
 class Degree(models.Model):
