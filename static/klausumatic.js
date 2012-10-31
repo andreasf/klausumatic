@@ -394,7 +394,7 @@ fim.namespace('fim.klausumatic.upload');
                 msg = "Upload finished:<br>" + 
                     currentUploadOK + " new files";
                 if (currentUploadDuplicate > 0) {
-                    msg = msg + ",<br>currentUploadDuplicate + 
+                    msg = msg + ",<br>" + currentUploadDuplicate + 
                     " duplicates ignored.";
                 }
                 fim.klausumatic.untagged.successMessageClosure(msg)();
