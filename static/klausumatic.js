@@ -308,7 +308,7 @@ fim.namespace('fim.klausumatic.upload');
         progressSel = "#upload_in_progress",
         speedSel = "#speed",
         uploadUrl = "/klausurdb/file/new",
-        maxFiles = 32,
+        maxFiles = 64,
         maxFileSize = 10,
         currentUploadOK = 0,
         currentUploadDuplicate = 0;
@@ -354,6 +354,7 @@ fim.namespace('fim.klausumatic.upload');
             allowedfiletypes: ['application/pdf'],
             maxfiles: maxFiles,
             maxfilesize: maxFileSize,
+            queuefiles: 4,
             dragOver: function() {
                 $(uploadSel).addClass("drop"); 
             },
