@@ -513,7 +513,8 @@ fim.namespace('fim.klausumatic.fn');
             'uebungsklausur'        :  'Uebungsklausur',
             'musterklausur'         :  'Musterklausur',
             'schlussklausur'        :  'Schlussklausur',
-            'modulklausur'          :  'Modulklausur'
+            'modulklausur'          :  'Modulklausur',
+            'endklausur'            :  'Endklausur'
         },
         profs = {
             'mcb'           :  'Majster-Cederbaum',
@@ -529,6 +530,7 @@ fim.namespace('fim.klausumatic.fn');
         var re = /([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_([a-zA-Z0-9]+)_?([a-zA-Z0-9]*)_?([a-zA-Z0-9]*)\.[a-zA-Z]+/,
             arr, prof, subj, type, sem, note, sol, tmp, year, hws;
 
+        filename = filename.toLowerCase();
         arr = re.exec(filename);
         if (typeof(arr) !== "undefined" && arr != null) {
             subj = getSubjectName(arr[1]);

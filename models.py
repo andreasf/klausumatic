@@ -25,6 +25,9 @@ class Professor(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 class Subject(models.Model):
     name = models.CharField(max_length=255, unique=True)
     abbreviation = models.CharField(max_length=16, unique=True)
@@ -42,11 +45,17 @@ class Subject(models.Model):
                 self.abbreviation = self.abbreviation[0:14] + str(i)
         super(Subject, self).save(*args, **kwargs)
 
+    class Meta:
+        ordering = ['name']
+
 class Degree(models.Model):
     name = models.CharField(max_length=127, unique=True)
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 class Exam(models.Model):
     subject = models.ForeignKey(Subject)

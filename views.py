@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def list_untagged(request):
     """returns a list of all untagged files."""
-    unt_obj = ExamFile.objects.filter(exam__isnull=True)
+    unt_obj = ExamFile.objects.filter(exam__isnull=True).order_by("upload_date")
     unt_list = []
     for obj in unt_obj:
         d = {
@@ -143,8 +143,7 @@ class UploadForm(forms.Form):
     file = forms.FileField()
 
 def secure_filename(path):
-    _split = re.compile(r'[\0%s]' % re.escape(''.join(
-        [os.path.sep, os.path.altsep or ''])))
+    _split = re.compile(r'[^\w.-]')
     return _split.sub('', path)
 
 def store_exam_file(uploaded_file):
