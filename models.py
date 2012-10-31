@@ -93,15 +93,15 @@ class Exam(models.Model):
         path = self.file.path.path
         if os.path.split(path)[1] != fn:
             newpath = os.path.join(os.path.split(path)[0], fn)
-            if os.path.exists(newpath):
-                msg = "Cannot rename %s to %s: file exists already." % (path, newpath)
-                logger.error(msg)
-                return msg
-            else:
-                shutil.move(path, newpath)
-                self.file.path = newpath
-                self.file.save()
-                logger.info("Exam file renamed: %s -> %s" % (path, newpath))
+            i = 1
+            while os.path.exists(newpath):
+                i = i + 1
+                fn = self.encode_filename() + "_" + str(i) + ".pdf"
+                newpath = os.path.join(os.path.split(path)[0], fn)
+            shutil.move(path, newpath)
+            self.file.path = newpath
+            self.file.save()
+            logger.info("Exam file renamed: %s -> %s" % (path, newpath))
 
     def __unicode__(self):
         return self.encode_filename()
