@@ -13,7 +13,7 @@ def enforce_filenames(modeladmin, request, queryset):
 enforce_filenames.short_description = "Enforce filename rules"
 
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ['subject', 'professor', 'degree', 'year', 'hws', 'solution']
+    list_display = ['subject', 'professor', 'degree', 'year', 'hws', 'solution', 'download']
     ordering = ['subject', 'professor', 'year', 'hws', 'solution']
     list_filter = ['subject', 'professor', 'year'] 
     actions = [enforce_filenames]
@@ -24,8 +24,9 @@ admin.site.register(Exam, ExamAdmin)
 
 class ExamFileAdmin(admin.ModelAdmin):
     readonly_fields = ('hash', 'upload_user')
-    list_display = ['path', 'hash', 'exam']
+    list_display = ['__unicode__', 'upload_date', 'upload_user', 'exam', 'download']
     ordering = ['path']
+    list_filter = ['upload_user']
     search_fields = ['path', 'hash']
 
     def save_model(self, request, obj, form, change):

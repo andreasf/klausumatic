@@ -7,8 +7,14 @@ from django.conf import settings
 import os.path
 import shutil
 import logging
+import os.path
+import urlparse
 
 logger = logging.getLogger(__name__)
+
+def get_url_for_file(filefield):
+    rel = os.path.relpath(filefield.path, settings.MEDIA_ROOT)
+    return urlparse.urljoin(settings.MEDIA_URL, rel)
 
 class ExamFile(models.Model):
     path = models.FileField(upload_to="exams")
@@ -16,8 +22,15 @@ class ExamFile(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     upload_user = models.CharField(max_length=127)
 
+    def download(self):
+        if self.path:
+            return "<a href=\"%s\">download</a>" % (get_url_for_file(self.path))
+        else:
+            return "no file"
+    download.allow_tags = True
+
     def __unicode__(self):
-        return self.path.path
+        return os.path.relpath(self.path.path, settings.MEDIA_ROOT)
 
 class Professor(models.Model):
     name = models.CharField(max_length=127, unique=True)
@@ -67,6 +80,12 @@ class Exam(models.Model):
     note = models.CharField(max_length=63, null=True, blank=True)
     solution = models.BooleanField()
 
+    def download(self):
+        if self.file:
+            return "<a href=\"%s\">download</a>" % (get_url_for_file(self.file.path))
+        else:
+            return "no file"
+    download.allow_tags = True
 
     def replace_umlauts(self, str):
         str = str.replace(u"ö", "oe")
