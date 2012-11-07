@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding=utf8
 #
 # KLAUSUMATIC 3000
 #
@@ -24,7 +25,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# coding=utf8
 
 from django.db import models
 from django.dispatch import receiver

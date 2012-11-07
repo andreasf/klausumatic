@@ -1,3 +1,4 @@
+# coding=utf8
 #
 # KLAUSUMATIC 3000
 #
@@ -23,7 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# coding=utf8
 
 from django.contrib import admin
 from models import Exam, ExamFile, Professor, Subject, Degree, Klausumatic
